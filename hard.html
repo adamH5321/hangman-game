@@ -103,12 +103,12 @@
 
 
 
-        /* Style for correctly guessed letters (green) */
+        
         .used-letters-list .correct-letter {
            color: green;
         }
 
-/* Style for incorrectly guessed letters (red) */
+
         .used-letters-list .incorrect-letter {
            color: red;
         }
@@ -183,7 +183,7 @@
         }
 
         .correct-word {
-            font-size: 24px; /* Increase the font size for the correct word */
+            font-size: 24px; 
         }
         @media (max-width: 980px) {
             .correct-word  {
@@ -227,29 +227,29 @@
            position: absolute;
            background-color: black;
            width: 10px;
-           height: 320px; /* You can adjust the height as needed */
-           right: 20px; /* Adjust the right value to position the pole as desired */
-           top: 200px; /* Adjust the top value to position the pole as desired */
+           height: 320px; 
+           right: 20px; 
+           top: 200px; 
         }
         @media (max-width: 980px) {
             .hangman-pole {
-                right: 50%; /* Center horizontally */
-                transform: translateX(50%); /* Center horizontally */
+                right: 50%;
+                transform: translateX(50%); 
                 height: 290px;
             }
         }
          .horizontal-line {
             position: absolute;
             background-color: black;
-            width: 100px; /* Adjust the width as needed */
-            height: 10px; /* Adjust the height as needed */
-            right: 20px; /* Adjust the left value to position the line */
-            top: 190px; /* Adjust the top value to position the line */
+            width: 100px;
+            height: 10px; 
+            right: 20px; 
+            top: 190px;
         }
         @media (max-width: 980px) {
             .horizontal-line {
-                right: 54.7%; /* Center horizontally */
-                transform: translateX(50%); /* Center horizontally */
+                right: 54.7%; 
+                transform: translateX(50%);
                 
             }
         }
@@ -258,14 +258,14 @@
            position: absolute;
            background-color: rgb(0, 0, 0);
            width: 10px;
-           height: 70px; /* You can adjust the height as needed */
-           right: 120px; /* Adjust the right value to position the pole as desired */
-           top: 190px; /* Adjust the top value to position the pole as desired */
+           height: 70px; 
+           right: 120px; 
+           top: 190px;
         }
         @media (max-width: 980px) {
             .vertical-line {
-                right: 60%; /* Center horizontally */
-                transform: translateX(50%); /* Center horizontally */
+                right: 60%; 
+                transform: translateX(50%); 
                 
             }
         }
@@ -275,13 +275,13 @@
             border-radius: 50%;
             width: 50px;
             height: 50px;
-            right: 100px; /* Adjust the right value to position the pole as desired */
-            top: 260px; /* Adjust the top value to position the pole as desired */
+            right: 100px; 
+            top: 260px; 
         }
         @media (max-width: 980px) {
             .head {
-                right: 60%; /* Center horizontally */
-                transform: translateX(50%); /* Center horizontally */
+                right: 60%; 
+                transform: translateX(50%); 
                 
             }
         }
@@ -291,13 +291,13 @@
             width: 10px;
             height: 85px;
             top: 310px;
-            right: 120px; /* Position body on the right */
+            right: 120px; 
             
         }
         @media (max-width: 980px) {
             .body {
-                right: 60%; /* Center horizontally */
-                transform: translateX(50%); /* Center horizontally */
+                right: 60%;
+                transform: translateX(50%);
                 
             }
         }
@@ -307,13 +307,13 @@
             width: 70px;
             height: 10px;
             top: 330px;
-            right: 120px; /* Position left arm on the right */
+            right: 120px; 
             transform: rotate(-45deg);
             
-        }
+        
         @media (max-width: 980px) {
             .left-arm {
-                right: 59%; /* Center horizontally */
+                right: 59%;
                 
                 
             }
@@ -324,13 +324,13 @@
             width: 70px;
             height: 10px;
             top: 330px;
-            right: 60px; /* Position left arm on the right */
+            right: 60px; 
             transform: rotate(45deg);
             
         }
         @media (max-width: 980px) {
             .right-arm {
-                right: 54%; /* Center horizontally */
+                right: 54%; 
                 
                 
             }
@@ -341,13 +341,13 @@
             width: 70px;
             height: 10px;
             top: 410px;
-            right: 117px; /* Position left arm on the right */
+            right: 117px; 
             transform: rotate(-45deg);
             
         }
         @media (max-width: 980px) {
             .left-leg {
-                right: 59%; /* Center horizontally */
+                right: 59%; 
                 
                 
             }
@@ -358,13 +358,13 @@
             width: 70px;
             height: 10px;
             top: 410px;
-            right: 63px; /* Position left arm on the right */
+            right: 63px;
             transform: rotate(45deg);
             
         }
         @media (max-width: 980px) {
             .right-leg {
-                right: 54%; /* Center horizontally */
+                right: 54%; 
                 
                 
             }
@@ -441,7 +441,7 @@
 
 
     <script>
-        // Define an array of 400 random words in their basic form
+        // Array of random words in their basic form
         const wordList = [
         "apple", "banana", "cherry", "grape", "orange", "strawberry",
     "table", "chair", "desk", "lamp", "couch", "bed",
@@ -570,10 +570,10 @@
 
             if (hangmanWord.includes(letter)) {
                 document.querySelector(".error-message").textContent = "Correct guess!";
-                document.querySelector(".used-letters-list").lastChild.style.color = "green"; // Make correctly guessed letter green
+                document.querySelector(".used-letters-list").lastChild.style.color = "green";
             } else {
                 document.querySelector(".error-message").textContent = "Incorrect guess!";
-                document.querySelector(".used-letters-list").lastChild.style.color = "red"; // Make incorrectly guessed letter red
+                document.querySelector(".used-letters-list").lastChild.style.color = "red";
                 guessesLeft--;
 
                 displayHangmanElements(4 - guessesLeft); // Display hangman element
