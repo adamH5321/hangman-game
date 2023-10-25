@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hard Mode</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: rgb(255, 255, 6);
+        }
+
+        h1, h2, .game-container, .used-letters-container {
+            text-align: center;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 60px;
+            margin-top: 50px;
+        }
+        @media (max-width: 980px) {
+            h1 {
+                font-size: 100px;
+            }
+        }
+
+        h2 {
+            font-size: 65px;
+        }
+
+       
+
+        .game-container {
+            background-color: black;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+
+        .game-title {
+            font-size: 28px;
+        }
+
+        @media (max-width: 980px) {
+            .game-title {
+                font-size: 70px;
+            }
+        }
+
+        .guess-input, .word-guess-input {
+            font-size: 24px;
+            padding: 5px 10px;
+            width: 250px;
+            border-radius: 5px;
+        }
+        @media (max-width: 980px) {
+            .guess-input, .word-guess-input {
+                font-size: 40px;
+            }
+        }
+
+        .guess-button, .word-guess-button {
+            background-color: white;
+            color: black;
+            border: none;
+            padding: 5px 10px;
+            font-size: 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        @media (max-width: 980px) {
+            .guess-button, .word-guess-button {
+                font-size: 40px;
+            }
+        }
+
+        .used-letters-container {
+            background-color: black;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            align-items: flex-start;
+            text-align: left;
+
+        }
+        
+
+        .used-letters-title {
+            font-size: 24px;
+        }
+        @media (max-width: 980px) {
+            .used-letters-title {
+                font-size: 40px;
+            }
+        }
+
+
+
+        /* Style for correctly guessed letters (green) */
+        .used-letters-list .correct-letter {
+           color: green;
+        }
+
+/* Style for incorrectly guessed letters (red) */
+        .used-letters-list .incorrect-letter {
+           color: red;
+        }
+
+        .used-letters-list {
+            font-size: 24px;
+        }
+        @media (max-width: 980px) {
+            .used-letters-list {
+                font-size: 40px;
+            }
+        }
+
+        .or-text {
+            font-size: 24px;
+        }
+        @media (max-width: 980px) {
+            .or-text {
+                font-size: 40px;
+            }
+        }
+
+        .word-to-guess {
+            font-size: 35px;
+            margin-bottom: 35px;
+        }
+        @media (max-width: 980px) {
+            .word-to-guess {
+                font-size: 60px;
+            }
+        }
+
+        .error-message {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: black;
+        }
+
+        .game-over-container, .win-container {
+            background-color: rgb(255, 255, 255);
+            color: rgb(5, 156, 5);
+            padding: 100px;
+            border-radius: 5px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            display: none;
+        }
+        
+        .game-over-container{
+             background-color: rgb(255, 255, 255);
+              color: rgb(156, 4, 4);
+            padding: 100px;
+            border-radius: 5px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            display: none;
+        }
+
+        .game-over-message, .win-message {
+            font-size: 40px;
+        }
+        @media (max-width: 980px) {
+            .game-over-message, .win-message  {
+                font-size: 60px;
+            }
+        }
+
+        .correct-word {
+            font-size: 24px; /* Increase the font size for the correct word */
+        }
+        @media (max-width: 980px) {
+            .correct-word  {
+                font-size: 60px;
+            }
+        }
+
+        .game-over-buttons, .win-buttons {
+            margin-top: 20px;
+        }
+
+        .game-over-button, .win-button {
+            background-color: rgb(0, 0, 0);
+            color: rgb(255, 255, 255);
+            border: none;
+            padding: 10px 20px;
+            font-size: 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+        @media (max-width: 980px) {
+            .game-over-button, .win-button {
+                font-size: 40px;
+                margin-top: 10px;
+            }
+        }
+
+
+        .congrats-message {
+            font-size: 40px;
+        }
+        @media (max-width: 980px) {
+            .congrats-message {
+                font-size: 60px;
+            }
+        }
+
+        .hangman-pole {
+           position: absolute;
+           background-color: black;
+           width: 10px;
+           height: 320px; /* You can adjust the height as needed */
+           right: 20px; /* Adjust the right value to position the pole as desired */
+           top: 200px; /* Adjust the top value to position the pole as desired */
+        }
+        @media (max-width: 980px) {
+            .hangman-pole {
+                right: 50%; /* Center horizontally */
+                transform: translateX(50%); /* Center horizontally */
+            }
+        }
+         .horizontal-line {
+            position: absolute;
+            background-color: black;
+            width: 100px; /* Adjust the width as needed */
+            height: 10px; /* Adjust the height as needed */
+            right: 20px; /* Adjust the left value to position the line */
+            top: 190px; /* Adjust the top value to position the line */
+        }
+        @media (max-width: 980px) {
+            .horizontal-line {
+                right: 54.7%; /* Center horizontally */
+                transform: translateX(50%); /* Center horizontally */
+                
+            }
+        }
+
+        .vertical-line {
+           position: absolute;
+           background-color: rgb(0, 0, 0);
+           width: 10px;
+           height: 70px; /* You can adjust the height as needed */
+           right: 120px; /* Adjust the right value to position the pole as desired */
+           top: 190px; /* Adjust the top value to position the pole as desired */
+        }
+        @media (max-width: 980px) {
+            .vertical-line {
+                right: 60%; /* Center horizontally */
+                transform: translateX(50%); /* Center horizontally */
+                
+            }
+        }
+        .head {
+            position: absolute;
+            background-color: black;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            right: 100px; /* Adjust the right value to position the pole as desired */
+            top: 260px; /* Adjust the top value to position the pole as desired */
+        }
+        @media (max-width: 980px) {
+            .head {
+                right: 60%; /* Center horizontally */
+                transform: translateX(50%); /* Center horizontally */
+                
+            }
+        }
+        .body {
+            position: absolute;
+            background-color: black;
+            width: 10px;
+            height: 85px;
+            top: 310px;
+            right: 120px; /* Position body on the right */
+            
+        }
+        @media (max-width: 980px) {
+            .body {
+                right: 60%; /* Center horizontally */
+                transform: translateX(50%); /* Center horizontally */
+                
+            }
+        }
+        .left-arm {
+            position: absolute;
+            background-color: black;
+            width: 70px;
+            height: 10px;
+            top: 330px;
+            right: 120px; /* Position left arm on the right */
+            transform: rotate(-45deg);
+            
+        }
+        @media (max-width: 980px) {
+            .left-arm {
+                right: 59%; /* Center horizontally */
+                
+                
+            }
+        }
+        .right-arm {
+            position: absolute;
+            background-color: black;
+            width: 70px;
+            height: 10px;
+            top: 330px;
+            right: 60px; /* Position left arm on the right */
+            transform: rotate(45deg);
+            
+        }
+        @media (max-width: 980px) {
+            .right-arm {
+                right: 54%; /* Center horizontally */
+                
+                
+            }
+        }
+        .left-leg {
+            position: absolute;
+            background-color: black;
+            width: 70px;
+            height: 10px;
+            top: 410px;
+            right: 117px; /* Position left arm on the right */
+            transform: rotate(-45deg);
+            
+        }
+        @media (max-width: 980px) {
+            .left-leg {
+                right: 59%; /* Center horizontally */
+                
+                
+            }
+        }
+        .right-leg {
+            position: absolute;
+            background-color: black;
+            width: 70px;
+            height: 10px;
+            top: 410px;
+            right: 63px; /* Position left arm on the right */
+            transform: rotate(45deg);
+            
+        }
+        @media (max-width: 980px) {
+            .right-leg {
+                right: 54%; /* Center horizontally */
+                
+                
+            }
+        }
+        
+        .head,
+        .body,
+        .left-arm,
+        .right-arm,
+        .left-leg,
+        .right-leg {
+            visibility: hidden;
+        }
+
+
+
+
+
+
+        
+
+        
+    </style>
+</head>
+<body>
+    <h1>HANGMAN</h1>
+
+    <p class="error-message"></p>
+
+    <div class="game-container">
+        <h2 class="game-title">Guess The Word</h2>
+        <p class="word-to-guess"></p>
+        <input type="text" class="guess-input" placeholder="Guess Letter"  onkeydown="if (event.key === 'Enter') document.querySelector('.guess-button').click()" />
+        <button class="guess-button">Guess</button>
+        <p class="or-text">Or</p>
+        <input type="text" class="word-guess-input" placeholder="Guess Word" onkeydown="if (event.key === 'Enter') document.querySelector('.word-guess-button').click()"  />
+        <button class="word-guess-button">Guess</button>
+    </div>
+
+    <div class="used-letters-container">
+        <h2 class ="used-letters-title">Used Letters</h2>
+        <ul class="used-letters-list">
+            <!-- Used letters will appear here -->
+        </ul>
+    </div>
+
+    <div class="game-over-container">
+        <p class="game-over-message">GAME OVER</p>
+        <p>correct word: <span class="correct-word"></span></p>
+        <div class="game-over-buttons">
+            <button class="game-over-button" id="home-button">Home</button>
+            <button class="game-over-button" id="new-game-button">New Game</button>
+        </div>
+    </div>
+
+    <div class="win-container">
+        <p class="win-message">CONGRATULATIONS! YOU WIN!</p>
+        <div class="win-buttons">
+            <button class="win-button" id="home-button-win">Home</button>
+            <button class="win-button" id="play-again-button">Play Again</button>
+        </div>
+         </div>
+
+         <div class="hangman-pole"></div>
+         <div class="horizontal-line"></div>
+         <div class="vertical-line"></div>
+         <div class="head"></div>
+         <div class="body"></div>
+         <div class="left-arm"></div>
+         <div class="right-arm"></div>
+         <div class="left-leg"></div>
+         <div class="right-leg"></div>
+         
+
+
+    <script>
+        // Define an array of 400 random words in their basic form
+        const wordList = [
+        "apple", "banana", "cherry", "grape", "orange", "strawberry",
+    "table", "chair", "desk", "lamp", "couch", "bed",
+    "dog", "cat", "rabbit", "hamster", "goldfish", "parrot",
+    "tree", "flower", "bush", "grass", "rock", "river",
+    "car", "bus", "bicycle", "motorcycle", "train", "truck",
+    "book", "magazine", "newspaper", "pen", "pencil", "notebook",
+    "phone", "laptop", "keyboard", "monitor", "mouse", "speaker",
+    "shoe", "sock", "hat", "glove", "scarf", "jacket",
+    "ocean", "beach", "island", "mountain", "desert", "forest",
+    "music", "guitar", "piano", "violin", "drums", "trumpet",
+    "sunset", "moon", "star", "planet", "galaxy", "comet",
+    "chef", "restaurant", "cook", "waiter", "menu", "dish",
+    "school", "teacher", "student", "class", "homework", "exam",
+    "doctor", "hospital", "nurse", "patient", "medicine", "surgery",
+    "movie", "actor", "director", "camera", "cinema", "popcorn",
+    "holiday", "vacation", "hotel", "beach", "sightseeing", "relax",
+    "garden", "flower", "rose", "tulip", "daisy", "sunflower",
+    "sport", "athlete", "stadium", "competition", "medal", "victory",
+    "party", "celebration", "music", "dance", "cake", "balloon",
+    "planet", "earth", "mars", "venus", "jupiter", "saturn",
+    "animal", "lion", "tiger", "elephant", "giraffe", "monkey",
+    "game", "player", "team", "score", "victory", "champion",
+    "ship", "ocean", "captain", "sailor", "island", "treasure",
+    "space", "astronaut", "rocket", "orbit", "alien", "exploration",
+    "history", "ancient", "civilization", "artifact", "museum", "archaeology",
+    "art", "painting", "sculpture", "exhibition", "artist", "gallery",
+    "theater", "play", "actor", "audience", "drama", "performance",
+    "police", "officer", "criminal", "investigation", "jail", "law",
+    "fashion", "designer", "clothing", "model", "runway", "trend",
+    "science", "research", "discovery", "experiment", "laboratory", "innovation",
+    "planet", "earth", "mars", "venus", "jupiter", "saturn",
+    "animal", "lion", "tiger", "elephant", "giraffe", "monkey",
+    "game", "player", "team", "score", "victory", "champion",
+    "ship", "ocean", "captain", "sailor", "island", "treasure",
+    "space", "astronaut", "rocket", "orbit", "alien", "exploration",
+    "history", "ancient", "civilization", "artifact", "museum", "archaeology",
+    "art", "painting", "sculpture", "exhibition", "artist", "gallery",
+    "theater", "play", "actor", "audience", "drama", "performance",
+    "police", "officer", "criminal", "investigation", "jail", "law",
+    "fashion", "designer", "clothing", "model", "runway", "trend",
+    "science", "research", "discovery", "experiment", "laboratory", "innovation"
+        ];
+
+        // Function to select a random word from the list
+        function getRandomWord() {
+            const randomIndex = Math.floor(Math.random() * wordList.length);
+            return wordList[randomIndex].toUpperCase();
+        }
+
+        // Declare the hangmanWord variable here
+        let hangmanWord;
+        let guessesLeft = 4;
+        let usedLetters = [];
+        let wordGuessUsed = false;
+
+        // Function to update the word display
+        function updateWordDisplay() {
+            const wordToGuessElement = document.querySelector(".word-to-guess");
+            let displayWord = "";
+            for (const letter of hangmanWord) {
+                if (usedLetters.includes(letter)) {
+                    displayWord += letter + " ";
+                } else {
+                    displayWord += "_ ";
+                }
+            }
+            wordToGuessElement.textContent = displayWord.trim();
+        }
+
+        // Function to show the game over message
+        function showGameOver(message, correctWord) {
+            const gameOverContainer = document.querySelector(".game-over-container");
+            const gameOverMessage = document.querySelector(".game-over-message");
+            const correctWordElement = document.querySelector(".correct-word");
+            gameOverMessage.textContent = message;
+            correctWordElement.textContent = correctWord;
+            gameOverContainer.style.display = "block";
+        }
+
+        // Function to show the win message
+        function showWin() {
+            const winContainer = document.querySelector(".win-container");
+            winContainer.style.display = "block";
+        }
+
+        function displayHangmanElements(incorrectAttempts) {
+    const hangmanElements = [
+        ".head",
+        ".body",
+        [".left-arm", ".right-arm"],
+        [".left-leg", ".right-leg"]
+    ];
+
+    // Reset the visibility of all hangman elements
+    const allHangmanElements = document.querySelectorAll(".hangman-element");
+    allHangmanElements.forEach(element => {
+        element.style.visibility = "hidden";
+    });
+
+    for (let i = 0; i < incorrectAttempts; i++) {
+        const element = hangmanElements[i];
+        if (Array.isArray(element)) {
+            // If it's an array of elements, show them together
+            for (const subElement of element) {
+                document.querySelector(subElement).style.visibility = "visible";
+            }
+        } else {
+            document.querySelector(element).style.visibility = "visible";
+        }
+    }
+}
+
+        
+
+        // Function to check a guessed letter
+        function checkLetter(letter) {
+            if (usedLetters.includes(letter)) {
+                document.querySelector(".error-message").textContent = "You already guessed this letter!";
+                return;
+            }
+
+            usedLetters.push(letter);
+            updateUsedLetters();
+            updateWordDisplay();
+
+            if (hangmanWord.includes(letter)) {
+                document.querySelector(".error-message").textContent = "Correct guess!";
+                document.querySelector(".used-letters-list").lastChild.style.color = "green"; // Make correctly guessed letter green
+            } else {
+                document.querySelector(".error-message").textContent = "Incorrect guess!";
+                document.querySelector(".used-letters-list").lastChild.style.color = "red"; // Make incorrectly guessed letter red
+                guessesLeft--;
+
+                displayHangmanElements(4 - guessesLeft); // Display hangman element
+
+                if (guessesLeft === 0) {
+                    showGameOver("GAME OVER", hangmanWord);
+                }
+            }
+
+            if (!document.querySelector(".word-to-guess").textContent.includes("_")) {
+                showWin();
+            }
+        }
+
+        // Function to check a guessed word
+        function checkWord(word) {
+            if (wordGuessUsed) {
+                document.querySelector(".error-message").textContent = "You already guessed the word!";
+                return;
+            }
+
+            if (word === hangmanWord) {
+                showWin();
+            } else {
+                document.querySelector(".error-message").textContent = "Incorrect word guess!";
+                showAllHangmanElements();
+                showGameOver("GAME OVER", hangmanWord);
+            }
+
+            wordGuessUsed = true;
+        }
+        function showAllHangmanElements() {
+        const hangmanElements = [
+        
+        ".head",
+        ".body",
+        ".left-arm",
+        ".right-arm",
+        ".left-leg",
+        ".right-leg"
+    ];
+
+    for (const element of hangmanElements) {
+        document.querySelector(element).style.visibility = "visible";
+    }
+}
+
+        
+
+        // Function to get a new random word and reset the game
+        function newGame() {
+            hangmanWord = getRandomWord();
+            guessesLeft = 4;
+            usedLetters = [];
+            wordGuessUsed = false;
+            updateWordDisplay();
+            updateUsedLetters();
+            document.querySelector(".error-message").textContent = "";
+            hideGameMessages();
+
+            // Reset hangman elements visibility
+         const hangmanElements = [
+        
+        ".head",
+        ".body",
+        ".left-arm",
+        ".right-arm",
+        ".left-leg",
+        ".right-leg"
+    ];
+    for (const element of hangmanElements) {
+        document.querySelector(element).style.visibility = "hidden";
+    }
+    
+    hideGameMessages();
+}
+        
+
+        // Function to hide game over and win messages
+        function hideGameMessages() {
+            const gameOverContainer = document.querySelector(".game-over-container");
+            const winContainer = document.querySelector(".win-container");
+            gameOverContainer.style.display = "none";
+            winContainer.style.display = "none";
+        }
+// Function to update the list of used letters
+function updateUsedLetters() {
+    const usedLettersList = document.querySelector(".used-letters-list");
+    let usedLettersHtml = "";
+
+    for (const letter of usedLetters) {
+        let letterHtml = letter;
+        if (hangmanWord.includes(letter)) {
+            letterHtml = `<span class="correct-letter">${letter}</span>`;
+        } else {
+            letterHtml = `<span class="incorrect-letter">${letter}</span>`;
+        }
+        usedLettersHtml += letterHtml + ",";
+    }
+
+    // Remove the trailing comma
+    usedLettersHtml = usedLettersHtml.slice(0, -1);
+    usedLettersList.innerHTML = usedLettersHtml;
+}
+
+        // Initialize the game with a new random word
+        newGame();
+
+        const guessButton = document.querySelector(".guess-button");
+        guessButton.addEventListener("click", function () {
+            const guessInput = document.querySelector(".guess-input");
+            const letter = guessInput.value.trim().toUpperCase();
+            guessInput.value = "";
+            if (letter.length === 1 && /^[A-Z]$/.test(letter)) {
+                checkLetter(letter);
+            } else {
+                document.querySelector(".error-message").textContent = "Please enter a single letter.";
+            }
+        });
+
+        const wordGuessButton = document.querySelector(".word-guess-button");
+        wordGuessButton.addEventListener("click", function () {
+            const wordGuessInput = document.querySelector(".word-guess-input");
+            const word = wordGuessInput.value.trim().toUpperCase();
+            wordGuessInput.value = "";
+            if (word.length > 0) {
+                checkWord(word);
+            } else {
+                document.querySelector(".error-message").textContent = "Please enter a word.";
+            }
+        });
+
+        const homeButton = document.getElementById("home-button");
+        const playAgainButton = document.getElementById("new-game-button");
+
+        homeButton.addEventListener("click", function () {
+            window.location.href = "index.html";
+        });
+
+        playAgainButton.addEventListener("click", function () {
+            newGame();
+        });
+
+        const homeButtonWin = document.getElementById("home-button-win");
+        const playAgainButtonWin = document.getElementById("play-again-button");
+
+        homeButtonWin.addEventListener("click", function () {
+            window.location.href = "index.html";
+        });
+
+        playAgainButtonWin.addEventListener("click", function () {
+            newGame();
+        });
+
+        
+    </script>
+</body>
+</html>
